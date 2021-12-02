@@ -4,6 +4,7 @@
 #include <utility>
 #include <png++/png.hpp>
 #include <string>
+#include <set>
 
 const uint32_t infinity = (256*256*255+254);
 const uint32_t max_value = infinity-1;
@@ -18,8 +19,9 @@ class Container
             for (size_t i = 0; i < NUMBER_OF_VECTORS; i++)
             {
                 data.push_back(std::vector<std::pair<int,int> >() );
-                data.back().reserve(RESERVED_ELEMENTS);
+                //data.back().reserve(RESERVED_ELEMENTS);
             }
+
 
             for (int a = 0; a < _image.get_height(); a++)
             {
@@ -85,12 +87,18 @@ class Container
 
         void nextTask(int endx, int endy, int level)
         {
-            for (size_t i = 0; i < data.size(); i++)
+            for (size_t i = *lookup.begin(); i < data.size(); i++)
             {
                 if(data[i].size() > 0)
                 {
                     std::pair<int,int> cell = data[i].back();
                     data[i].pop_back();
+
+                    if(data[i].size() == 0)
+                    {
+                        lookup.erase(i);
+                    }
+
                     findWay(cell.first, cell.second, endx, endy, level);
                 }
             }
@@ -110,6 +118,7 @@ class Container
 
         void addTask(int x, int y, int value)
         {
+            lookup.insert(value);
             data[value].push_back(std::pair<int,int>(x,y));
         }
 
@@ -163,7 +172,7 @@ class Container
                 }
             }
 
-            std::cout << "(" << miny << "," << minx << "): " << minimum << "<" << oldminimum << std::endl;
+            //std::cout << "(" << miny << "," << minx << "): " << minimum << "<" << oldminimum << std::endl;
 
             return std::pair<int,int>(minx,miny);
         }
@@ -197,8 +206,10 @@ class Container
             std::cout << "Filled containers" << " " << ": " << counter << std::endl;
         }
 
+
         const size_t RESERVED_ELEMENTS = 100;
-        const size_t NUMBER_OF_VECTORS = 1000;
+        const size_t NUMBER_OF_VECTORS = 5000;
+        std::set<int> lookup;
 		std::vector<std::vector<std::pair<int,int> > > data;
         std::vector<std::vector<u_int16_t > >image;
         std::vector<std::vector<u_int32_t > > path;

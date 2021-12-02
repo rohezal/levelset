@@ -1,6 +1,7 @@
 #include <iostream>
 #include <png.h>
 #include <png++/png.hpp>
+#include <set>
 #include "levelset.h"
 
 int main()
@@ -9,7 +10,7 @@ int main()
 
     png::image<png::gray_pixel_16> img("way.png");
 
-    std::cout << img.get_width() << " " << img.get_width() << std::endl;
+    //std::cout << img.get_width() << " " << img.get_width() << std::endl;
     Container container(img);
     container.findWay(sy,sx,ey,ex);
     container.drawPath(ex,ey,sx,sy);
