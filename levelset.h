@@ -5,6 +5,7 @@
 #include <png++/png.hpp>
 #include <string>
 #include <set>
+#include <map>
 
 const uint32_t infinity = (256*256*255+254);
 const uint32_t max_value = infinity-1;
@@ -87,6 +88,7 @@ class Container
 
         void nextTask(int endx, int endy, int level)
         {
+            /*
             for (size_t i = *lookup.begin(); i < data.size(); i++)
             {
                 if(data[i].size() > 0)
@@ -102,6 +104,27 @@ class Container
                     findWay(cell.first, cell.second, endx, endy, level);
                 }
             }
+            */
+
+            int key = (*(tasks.begin())).first;
+            std::vector<std::pair<int,int> >& taskvector = tasks[key];
+
+            if(taskvector.size() == 0)
+            {
+                    std::cout << "ERROR!" << std::endl;
+            }
+
+            std::pair<int,int> cell = taskvector.back();
+
+            taskvector.pop_back();
+
+            if(taskvector.size() == 0)
+            {
+                tasks.erase(key);
+            }
+
+
+            findWay(cell.first, cell.second, endx, endy, level);
         }
 
         void tagCell(int x, int y, int value)
@@ -120,6 +143,20 @@ class Container
         {
             lookup.insert(value);
             data[value].push_back(std::pair<int,int>(x,y));
+
+            std::map<int,std::vector< std::pair<int,int> > >::iterator i = tasks.find(value);
+            if (i == tasks.end())
+            {
+                std::vector<std::pair<int,int> > temp;
+                temp.push_back(std::pair<int,int>(x,y));
+                tasks[value] = temp;
+            }
+            else
+            {
+                tasks[value].push_back(std::pair<int,int>(x,y));
+            }
+
+
         }
 
         bool validCords(int x, int y)
@@ -210,6 +247,7 @@ class Container
         const size_t RESERVED_ELEMENTS = 100;
         const size_t NUMBER_OF_VECTORS = 5000;
         std::set<int> lookup;
+        std::map<int,std::vector<std::pair<int,int> > > tasks;
 		std::vector<std::vector<std::pair<int,int> > > data;
         std::vector<std::vector<u_int16_t > >image;
         std::vector<std::vector<u_int32_t > > path;
