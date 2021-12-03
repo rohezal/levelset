@@ -10,19 +10,18 @@
 const uint32_t infinity = (256*256*255+254);
 const uint32_t max_value = infinity-1;
 
-
-
 class Container
 {
     public:
         Container(const png::image<png::gray_pixel_16>& _image)
         {
+            /*
             for (size_t i = 0; i < NUMBER_OF_VECTORS; i++)
             {
                 data.push_back(std::vector<std::pair<int,int> >() );
                 //data.back().reserve(RESERVED_ELEMENTS);
             }
-
+            */
 
             for (int a = 0; a < _image.get_height(); a++)
             {
@@ -111,7 +110,7 @@ class Container
 
             if(taskvector.size() == 0)
             {
-                    std::cout << "ERROR!" << std::endl;
+                    std::cout << "ERROR! VECTOR EMPTY FROM MAP IN nextTask" << std::endl;
             }
 
             std::pair<int,int> cell = taskvector.back();
@@ -141,8 +140,8 @@ class Container
 
         void addTask(int x, int y, int value)
         {
-            lookup.insert(value);
-            data[value].push_back(std::pair<int,int>(x,y));
+            //lookup.insert(value);
+            //data[value].push_back(std::pair<int,int>(x,y));
 
             std::map<int,std::vector< std::pair<int,int> > >::iterator i = tasks.find(value);
             if (i == tasks.end())
@@ -155,8 +154,6 @@ class Container
             {
                 tasks[value].push_back(std::pair<int,int>(x,y));
             }
-
-
         }
 
         bool validCords(int x, int y)
