@@ -6,11 +6,13 @@
 
 int main()
 {
-    int sx = 0, sy = 0, ex = 255, ey = 255;
+    //int sx = 0, sy = 0, ex = 150, ey = 150;
+    int sx = 0, sy = 0, ex = 510, ey = 510;
 
-    png::image<png::gray_pixel_16> img("way.png");
+    png::image<png::gray_pixel_16> img("way_big.png");
+    //png::image<png::gray_pixel_16> img("way.png");
 
-    //std::cout << img.get_width() << " " << img.get_width() << std::endl;
+    std::cout << "Imagesize: " << img.get_width() << " " << img.get_width() << std::endl;
     Container container(img);
     container.findWay(sy,sx,ey,ex);
     container.drawPath(ex,ey,sx,sy);
