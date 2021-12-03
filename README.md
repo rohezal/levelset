@@ -1,3 +1,3 @@
 # levelset
 
- ulimit -s 65535
+You need lingpng and libpng++ (just a header library)
